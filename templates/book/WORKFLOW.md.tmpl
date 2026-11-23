@@ -1,0 +1,95 @@
+# {{title}} — book workflow
+
+Status: initialized by `af_init`. This file is the book-level workflow record.
+Per-chapter records live in `chapters/{{chapter}}/WORKFLOW.md`.
+
+## Metadata
+
+| Field | Value |
+| --- | --- |
+| Slug | `{{slug}}` |
+| Title | {{title}} |
+| Book mode | `statements` (default) |
+| Chapter overrides | see `book.json` → `chapter_modes` |
+| Visibility | `public` on every mission |
+| Materials | `all` |
+| Exercises | included |
+| Lean project | see `book.json` → `lean_project` |
+| Toolchain | see `book.json` → `toolchain` |
+
+## Scope
+
+Every parsed item and every exercise is in scope. The parser records chapters,
+sections, displayed items and exercises in `toc.json` and `items.jsonl`.
+Front matter, appendices and indexes are included only if the source parser
+cards them; otherwise they remain source context.
+
+## Chapter table
+
+| Order | Ch | Title | Sections | Items | Ex. | Reuse | Diff. 1–5 | Mission | Status |
+| ---: | --- | --- | ---: | ---: | ---: | :---: | :---: | --- | --- |
+| 1 | {{chapter}} | {{title}} | — | — | — | ? | — | `MLM {{chapter}} — {{title}}` | planned |
+
+Replace the placeholder row with one row per chapter after `af_ingest`.
+
+## Recommended order
+
+Start with the prerequisite chapters, then pilot one chapter in `full` mode,
+then follow the dependency DAG. Record the chosen order here.
+
+## Per-section pipeline
+
+| # | Stage | Role | Gate |
+| ---: | --- | --- | --- |
+| 1 | Ingest | architect | counts match the parser summary; every item has `id` and `source` |
+| 2 | Reuse triage | architect | every card has `reuse` in `M/F/S/N`, no `?` |
+| 3 | Definitions | architect + statement-smith | `af_check` with zero `sorry`; read-back accepted; `defs.lock` entry |
+| 4 | Statements | statement-smith | `af_check` = `OK_STATEMENT`; exactly one `sorry` in mode 2 |
+| 5 | Read-back audit | auditor | `readback` non-null; binders/hypotheses/universes confirmed |
+| 6 | Sketch | prover | dependency edges and key lemmas reviewed (mode 1 only) |
+| 7 | Proof | prover | `af_check` = `OK_PROOF`; zero `sorry`; no new axiom (mode 1 only) |
+
+Mode 2 stops after stage 5. A `statements` chapter never emits `sketch` or
+`prove` tasks and never creates a `Solutions/` file for a theorem-like card.
+
+## Definition freeze
+
+Definitions freeze before dependent statements. For each definition:
+
+1. formalize it in `Definitions/Def_*.lean`;
+2. compile it with `af_check` (zero `sorry`, no `axiom`, no `unsafe`);
+3. read it back against the source;
+4. append a JSON Lines record to `chapters/{{chapter}}/defs.lock`:
+
+   ```json
+   {"lean_name":"Def_...","file":"Definitions/Def_....lean","sha256":"<hash>","frozen_at":"<iso>","chapter":"{{chapter}}"}
+   ```
+
+5. after a change, append a new record and re-audit every dependent card.
+
+`defs.lock` is append-only. The old record stays for history.
+
+## Public mission rule
+
+Every mission is public. `"private"` is rejected by `af_init` and
+`af_mission`; `af_status` warns on any non-public mission; `submit.sh` always
+passes `"visibility":"public"`.
+
+## Mission mapping
+
+- one mission per chapter: `MLM <chapter> — <title>`;
+- one milestone per section, plus one `Exercises` milestone;
+- one card per item; definitions first, then theorem-like cards, then exercises;
+- `af_mission` writes `missions/<chapter>/proposal.json`, `mission.md` and
+  `submit.sh`, and never executes the script.
+
+## Log
+
+- **YYYY-MM-DD** — Workspace initialized from the `templates/book` template.
+  Ingest, planning and the first definition freeze are pending.
+
+## Current frontier
+
+| Chapter | Mode | Status | Frontier | Next gate |
+| --- | --- | --- | --- | --- |
+| {{chapter}} | `statements` | planned | — | ingest |

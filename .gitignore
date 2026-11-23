@@ -1,0 +1,16 @@
+state/
+runs/
+logs/
+*.log
+node_modules/
+dist/
+__pycache__/
+.venv/
+*.safetensors
+*.pt
+*.bin
+.env
+books/*/exports/
+
+# book data is not redistributed
+books/

@@ -1,0 +1,42 @@
+# Missions — {{title}}
+
+Every mission is **public**. `af_init` and `af_mission` reject
+`"visibility":"private"`; `submit.sh` always passes `"visibility":"public"`.
+
+## Mission index
+
+| Mission | Mode | Status | Depends on | Items | Exercises | Milestones |
+| --- | --- | --- | --- | ---: | ---: | ---: |
+| `MLM {{chapter}} — {{title}}` | `statements` | planned | — | — | — | — |
+
+Replace the placeholder row after `af_plan`, one row per chapter.
+
+## MLM {{chapter}} — {{title}}
+
+| Field | Value |
+| --- | --- |
+| Chapter | {{chapter}} |
+| Mode | `statements` |
+| Visibility | `public` |
+| Status | planned |
+| Depends on | — |
+| Displayed items | see `toc.json` |
+| Exercises | see `toc.json` |
+| Milestones | one per section + `Exercises` |
+
+**Goal.** One sentence naming the chapter's main theorem or construction and
+the section range, paraphrased from the source.
+
+**Milestones.**
+
+- `{{chapter}}.1` First section — cards from `toc.json`
+- `{{chapter}}.Exercises` Exercises — cards from `toc.json`
+
+**Exit criteria.** In `statements` mode: every displayed card is `stated` with a
+read-back and compiles with exactly one `sorry`; every exercise is `by sorry`;
+no `Solutions/` file exists for a theorem-like card. In `full` mode: every card
+is `proved` with zero `sorry`, definitions are frozen, and no new axiom was
+introduced.
+
+**Mission text.** `af_mission` builds `missions/{{chapter}}/proposal.json`,
+`mission.md` and `submit.sh`; it never executes the submit script.

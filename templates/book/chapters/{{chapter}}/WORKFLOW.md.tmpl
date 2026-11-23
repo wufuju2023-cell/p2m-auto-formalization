@@ -1,0 +1,54 @@
+# Chapter {{chapter}} — {{title}}
+
+Book: `{{slug}}`. Mission: `MLM {{chapter}} — {{title}}`.
+
+## Metadata
+
+| Field | Value |
+| --- | --- |
+| Chapter | {{chapter}} |
+| Title | {{title}} |
+| Mode | book default, unless `book.json` has a `chapter_modes` entry |
+| Status | planned |
+| Visibility | `public` |
+| Sections | from `toc.json` |
+| Displayed items | from `toc.json` |
+| Exercises | from `toc.json` |
+| Reuse class | `?` (set after reuse triage) |
+| Difficulty (1–5) | — |
+| Execution order | — |
+| Depends on | — |
+
+## Section checklist
+
+- [ ] `{{chapter}}.1` First section — cards from `toc.json`
+- [ ] `{{chapter}}.Exercises` Exercises — cards from `toc.json`
+
+Each box closes only when the section reaches its mode's exit stage:
+`stated` + read-back in `statements` mode, `proved` in `full` mode.
+
+## Definition-freeze checklist
+
+- [ ] Inventory every `kind:"definition"` card and every imported frozen name.
+- [ ] Formalize each definition in `Definitions/Def_*.lean`.
+- [ ] Compile with `af_check`; zero `sorry`, no `axiom`, no `unsafe`.
+- [ ] Independent read-back of domains, codomains, universes and implicits.
+- [ ] Append the frozen record to `chapters/{{chapter}}/defs.lock`.
+- [ ] Re-audit every card whose `depends_on` names a changed definition.
+
+## Statement / audit / proof status
+
+| Section | Cards | Defs | Stated | Audited | Proved | Status |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| `{{chapter}}.1` First section | — | — | 0 | 0 | 0 | not started |
+
+Replace the placeholder rows with one row per section after `af_ingest`.
+
+## Notes
+
+- Source line numbers are absolute `path:line` values in `items.jsonl`.
+- Items without a `Proof:` marker need the statement/discussion split recorded
+  in `notes` during the read-back audit.
+- `statements` mode stops after the audit; do not emit `sketch` or `prove`.
+- `full` mode continues through sketch and proof.
+- Append decisions with `af_record`; do not rewrite this file's history.
