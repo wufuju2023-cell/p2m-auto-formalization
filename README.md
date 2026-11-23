@@ -273,3 +273,8 @@ the bundled Sheaves seed (11 chapters, 96 sections, 451 cards, missions I, IV an
 - **Default data directory.** `books/` lives under `./books`,
   outside this git repository. Add `books/` to `.gitignore` if you point
   `booksDir` inside the repo; the export directory is already ignored.
+
+## Data
+
+Book data used during development is not redistributed in this repository.
+Bring your own PDF/Markdown and run `af_ingest` locally.
